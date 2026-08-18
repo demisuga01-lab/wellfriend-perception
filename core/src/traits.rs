@@ -2,101 +2,117 @@ use crate::*;
 
 /// Supplies observations from a camera, file system, network, or another input source.
 pub trait InputProvider {
-    fn next(&mut self, context: &PipelineContext) -> Result<ObservationFrame, String>;
+    /// Produces the next domain-neutral observation frame.
+    fn next(&mut self, context: &PipelineContext) -> PerceptionResult<ObservationFrame>;
 }
 /// Measures generic and domain-defined quality signals.
 pub trait QualityAnalyzer {
+    /// Measures quality for an observation frame.
     fn analyze(
         &self,
         frame: &ObservationFrame,
         context: &PipelineContext,
-    ) -> Result<QualityReport, String>;
+    ) -> PerceptionResult<QualityReport>;
 }
 /// Produces independently attributable detection candidates.
 pub trait Detector {
+    /// Produces candidates without discarding source evidence.
     fn detect(
         &self,
         frame: &ObservationFrame,
         quality: &QualityReport,
         context: &PipelineContext,
-    ) -> Result<DetectionSet, String>;
+    ) -> PerceptionResult<DetectionSet>;
 }
 /// Reconciles candidates from independent sources without discarding provenance.
 pub trait FusionEngine {
+    /// Fuses detector output.
     fn fuse(
         &self,
         detections: &[DetectionSet],
         context: &PipelineContext,
-    ) -> Result<FusionResult, String>;
+    ) -> PerceptionResult<FusionResult>;
 }
 /// Improves a selected candidate while preserving its uncertainty and source evidence.
 pub trait Refiner {
+    /// Refines fused evidence.
     fn refine(
         &self,
         fused: &FusionResult,
         context: &PipelineContext,
-    ) -> Result<RefinementResult, String>;
+    ) -> PerceptionResult<RefinementResult>;
 }
 /// Maintains temporal evidence and capture readiness across observations.
 pub trait TemporalEstimator {
+    /// Updates state from a frame and refinement output.
     fn update(
         &mut self,
         frame: &ObservationFrame,
         result: &RefinementResult,
         context: &PipelineContext,
-    ) -> Result<TemporalState, String>;
+    ) -> PerceptionResult<TemporalState>;
 }
 /// Builds a declared geometry model from temporal and refined evidence.
 pub trait Reconstructor {
+    /// Reconstructs the selected model.
     fn reconstruct(
         &self,
         model: GeometryModel,
         refined: &RefinementResult,
         temporal: &TemporalState,
         context: &PipelineContext,
-    ) -> Result<ReconstructionResult, String>;
+    ) -> PerceptionResult<ReconstructionResult>;
 }
 /// Converts observed defects or conditions into router inputs.
 pub trait ConditionAnalyzer {
+    /// Analyzes conditions from quality and reconstruction evidence.
     fn analyze_conditions(
         &self,
         quality: &QualityReport,
         reconstruction: &ReconstructionResult,
         context: &PipelineContext,
-    ) -> Result<ConditionVector, String>;
+    ) -> PerceptionResult<ConditionVector>;
 }
 /// Executes one routed specialized operation.
 pub trait Processor {
+    /// Stable processor identifier.
     fn id(&self) -> &str;
+    /// Declares routing capabilities and expected cost/benefit.
     fn capabilities(&self) -> ProcessorCapabilities;
+    /// Processes an image under the selected condition plan.
     fn process(
         &self,
         image: &ImageBuffer,
         conditions: &ConditionVector,
         context: &PipelineContext,
-    ) -> Result<ProcessorResult, String>;
+    ) -> PerceptionResult<ProcessorResult>;
 }
 /// Assigns semantic regions and relationships to reconstructed output.
 pub trait SemanticEngine {
+    /// Interprets reconstructed imagery.
     fn interpret(
         &self,
         image: &ImageBuffer,
         reconstruction: &ReconstructionResult,
         context: &PipelineContext,
-    ) -> Result<SemanticResult, String>;
+    ) -> PerceptionResult<SemanticResult>;
 }
 /// Serializes domain output into a stable schema.
 pub trait Exporter {
+    /// Exports semantic and reconstruction output.
     fn export(
         &self,
         semantic: &SemanticResult,
         reconstruction: &ReconstructionResult,
         context: &PipelineContext,
-    ) -> Result<StructuredOutput, String>;
+    ) -> PerceptionResult<StructuredOutput>;
 }
 /// Installs domain-specific behavior while retaining generic core contracts.
 pub trait DomainPack {
+    /// Stable pack identifier.
     fn id(&self) -> &str;
+    /// Supported pipeline stages.
     fn supported_stages(&self) -> &[PipelineStage];
+    /// Structured output schema identifier.
     fn output_schema(&self) -> &str;
 }
