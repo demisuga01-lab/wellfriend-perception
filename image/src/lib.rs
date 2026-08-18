@@ -40,6 +40,37 @@ pub fn crop(
     ImageBuffer::new(width, height, input.pixel_format, data)
 }
 
+/// Adds a constant-value border around an image without changing its pixel layout.
+pub fn pad_constant(
+    input: &ImageBuffer,
+    left: u32,
+    top: u32,
+    right: u32,
+    bottom: u32,
+    value: u8,
+) -> Result<ImageBuffer, String> {
+    let width = input
+        .width
+        .checked_add(left)
+        .and_then(|v| v.checked_add(right))
+        .ok_or("padded width overflow")?;
+    let height = input
+        .height
+        .checked_add(top)
+        .and_then(|v| v.checked_add(bottom))
+        .ok_or("padded height overflow")?;
+    let channels = input.pixel_format.channels();
+    let mut data = vec![value; width as usize * height as usize * channels];
+    for source_y in 0..input.height {
+        let source_start = source_y as usize * input.width as usize * channels;
+        let target_start = ((source_y + top) as usize * width as usize + left as usize) * channels;
+        data[target_start..target_start + input.width as usize * channels].copy_from_slice(
+            &input.data[source_start..source_start + input.width as usize * channels],
+        );
+    }
+    ImageBuffer::new(width, height, input.pixel_format, data)
+}
+
 pub fn normalize_gray(input: &ImageBuffer) -> Result<ImageBuffer, String> {
     if input.pixel_format != PixelFormat::Gray8 {
         return Err("normalization currently requires Gray8".into());
@@ -85,6 +116,39 @@ pub fn threshold_gray(input: &ImageBuffer, threshold: u8) -> Result<ImageBuffer,
     )
 }
 
+/// Applies a zero-padded 3x3 convolution to a Gray8 image and returns signed samples.
+pub fn convolve_gray_3x3(input: &ImageBuffer, kernel: [f32; 9]) -> Result<Vec<f32>, String> {
+    if input.pixel_format != PixelFormat::Gray8 {
+        return Err("convolution currently requires Gray8".into());
+    }
+    let mut output = vec![0.0; input.width as usize * input.height as usize];
+    for y in 0..input.height as i32 {
+        for x in 0..input.width as i32 {
+            let mut total = 0.0;
+            for ky in -1..=1 {
+                for kx in -1..=1 {
+                    let sx = x + kx;
+                    let sy = y + ky;
+                    if sx >= 0 && sy >= 0 && sx < input.width as i32 && sy < input.height as i32 {
+                        let source = input.data[sy as usize * input.width as usize + sx as usize];
+                        total +=
+                            f32::from(source) * kernel[(ky + 1) as usize * 3 + (kx + 1) as usize];
+                    }
+                }
+            }
+            output[y as usize * input.width as usize + x as usize] = total;
+        }
+    }
+    Ok(output)
+}
+
+/// Returns baseline Sobel gradient magnitudes for a Gray8 image.
+pub fn sobel_magnitude_gray(input: &ImageBuffer) -> Result<Vec<f32>, String> {
+    let x = convolve_gray_3x3(input, [-1.0, 0.0, 1.0, -2.0, 0.0, 2.0, -1.0, 0.0, 1.0])?;
+    let y = convolve_gray_3x3(input, [-1.0, -2.0, -1.0, 0.0, 0.0, 0.0, 1.0, 2.0, 1.0])?;
+    Ok(x.into_iter().zip(y).map(|(gx, gy)| gx.hypot(gy)).collect())
+}
+
 /// Baseline nearest-neighbor resize. Convolution and gradients remain pluggable CPU kernels.
 pub fn resize_nearest(input: &ImageBuffer, width: u32, height: u32) -> Result<ImageBuffer, String> {
     if width == 0 || height == 0 {
@@ -115,5 +179,12 @@ mod tests {
             vec![0, 255, 255, 0]
         );
         assert_eq!(resize_nearest(&image, 1, 1).unwrap().data, vec![0]);
+        assert_eq!(pad_constant(&image, 1, 1, 1, 1, 7).unwrap().width, 4);
+        assert!(
+            sobel_magnitude_gray(&image)
+                .unwrap()
+                .iter()
+                .any(|value| *value > 0.0)
+        );
     }
 }

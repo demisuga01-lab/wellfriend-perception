@@ -68,6 +68,7 @@ pub trait ConditionAnalyzer {
 /// Executes one routed specialized operation.
 pub trait Processor {
     fn id(&self) -> &str;
+    fn capabilities(&self) -> ProcessorCapabilities;
     fn process(
         &self,
         image: &ImageBuffer,

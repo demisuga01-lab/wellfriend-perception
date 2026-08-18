@@ -315,6 +315,17 @@ pub struct ProcessorResult {
     pub diagnostics: Vec<String>,
 }
 
+/// Declared operating envelope used by the specialist router for plan selection.
+#[derive(Clone, Debug, Default, PartialEq)]
+pub struct ProcessorCapabilities {
+    pub capabilities: Vec<String>,
+    pub expected_benefit: f32,
+    pub estimated_cost_ms: u32,
+    pub supported_device_classes: Vec<String>,
+    pub confidence: f32,
+    pub diagnostics: Vec<String>,
+}
+
 /// A typed semantic region, independent of OCR or document-specific labels.
 #[derive(Clone, Debug, PartialEq)]
 pub struct SemanticRegion {
