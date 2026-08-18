@@ -12,3 +12,6 @@ wellfriend-perception-core = { path = "../core" }
 [lints]
 workspace = true
 
+[[bench]]
+name = "baseline"
+harness = false
