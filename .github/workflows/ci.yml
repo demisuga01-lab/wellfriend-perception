@@ -10,10 +10,12 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
         with:
           components: rustfmt, clippy
-      - run: cargo fmt --check
-      - run: cargo clippy --workspace --all-targets -- -D warnings
-      - run: cargo test --workspace
-      - run: cargo doc --workspace --no-deps
+      - run: cargo fmt --all -- --check
+      - run: cargo clippy --workspace --all-targets --all-features -- -D warnings
+      - run: cargo test --workspace --all-features
+      - run: cargo doc --workspace --all-features --no-deps
+      - run: cargo bench --workspace --no-run
       - shell: pwsh
         run: ./tools/check-dependency-register.ps1
-
+      - shell: pwsh
+        run: ./tools/check-benchmark-schema.ps1

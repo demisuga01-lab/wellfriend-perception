@@ -8,6 +8,7 @@ source_url = "https://github.com/opencv/opencv"
 purpose = "Optional classical geometry adapter"
 risk_level = "low"
 status = "not-vendored"
+used_by = ["future classical geometry adapter"]
 
 [[dependency]]
 name = "ONNX Runtime"
@@ -17,6 +18,7 @@ source_url = "https://github.com/microsoft/onnxruntime"
 purpose = "Optional model-runtime adapter"
 risk_level = "low"
 status = "not-vendored"
+used_by = ["future model runtime adapter"]
 
 [[dependency]]
 name = "PaddleOCR"
@@ -26,6 +28,7 @@ source_url = "https://github.com/PaddlePaddle/PaddleOCR"
 purpose = "Optional OCR integration reference"
 risk_level = "medium"
 status = "code-and-weights-require-separate-audit"
+used_by = ["future document semantic integration"]
 
 [[dependency]]
 name = "CameraX"
@@ -35,6 +38,7 @@ source_url = "https://developer.android.com/jetpack/androidx/releases/camera"
 purpose = "Android capture integration in wellfriend-scan"
 risk_level = "low"
 status = "not-vendored"
+used_by = ["wellfriend-scan Android capture only"]
 
 [[dependency]]
 name = "DocRes"
@@ -44,6 +48,7 @@ source_url = "https://github.com/ZZZHANG-jx/DocRes"
 purpose = "Restoration reference"
 risk_level = "high"
 status = "code-mit-weights-and-datasets-separate-audit"
+used_by = ["future document restoration adapter"]
 
 [[dependency]]
 name = "PINTO doc-dewarping"
@@ -53,6 +58,7 @@ source_url = "https://github.com/PINTO0309/PINTO_model_zoo"
 purpose = "Curved-page dewarping reference"
 risk_level = "medium"
 status = "exact-component-license-must-be-verified"
+used_by = ["future curved-surface reconstruction adapter"]
 
 [[dependency]]
 name = "DocAligner"
@@ -62,6 +68,7 @@ source_url = "https://github.com/fh2019ustc/DocAligner"
 purpose = "Corner-prediction reference"
 risk_level = "medium"
 status = "exact-release-license-must-be-verified"
+used_by = ["future document corner detector reference"]
 
 [[dependency]]
 name = "MakeACopy"
@@ -71,6 +78,7 @@ source_url = "https://github.com/antonioleiva/make-a-copy"
 purpose = "Android scanner foundation reference"
 risk_level = "medium"
 status = "exact-upstream-license-must-be-verified"
+used_by = ["wellfriend-scan Android reference only"]
 
 [[dependency]]
 name = "actions/checkout"
@@ -80,6 +88,7 @@ source_url = "https://github.com/actions/checkout"
 purpose = "GitHub Actions checkout"
 risk_level = "low"
 status = "ci-only"
+used_by = ["GitHub Actions CI and benchmark workflows"]
 
 [[dependency]]
 name = "dtolnay/rust-toolchain"
@@ -89,3 +98,4 @@ source_url = "https://github.com/dtolnay/rust-toolchain"
 purpose = "GitHub Actions Rust toolchain setup"
 risk_level = "low"
 status = "ci-only"
+used_by = ["GitHub Actions CI and benchmark workflows"]

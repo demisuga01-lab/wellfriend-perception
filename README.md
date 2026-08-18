@@ -13,12 +13,12 @@ The first reference domain is document scanning, but the core deliberately does 
 
 ```powershell
 cargo fmt --check
-cargo clippy --workspace --all-targets -- -D warnings
-cargo test --workspace
-cargo doc --workspace --no-deps
+cargo clippy --workspace --all-targets --all-features -- -D warnings
+cargo test --workspace --all-features
+cargo doc --workspace --all-features --no-deps
+cargo bench --workspace --no-run
 ```
 
-Current status: MP1 architecture contracts and baseline image primitives are implemented. Production detector ensembles, platform bindings, and optimized kernels are intentionally deferred.
+Current status: MP2 provides checked image buffers/views, domain-neutral math and geometry, scalar image operations, homography/warp, deterministic line RANSAC, and baseline benchmarks. Production detector ensembles, platform bindings, model integrations, and optimized kernels are intentionally deferred.
 
 The repository is Apache-2.0. See [third_party/dependency-register.toml](third_party/dependency-register.toml) and [docs/dependency-policy.md](docs/dependency-policy.md) before adding dependencies.
-
