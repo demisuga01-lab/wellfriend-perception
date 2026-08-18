@@ -1,0 +1,91 @@
+schema_version = 1
+
+[[dependency]]
+name = "OpenCV"
+version = "planned"
+license = "Apache-2.0"
+source_url = "https://github.com/opencv/opencv"
+purpose = "Optional classical geometry adapter"
+risk_level = "low"
+status = "not-vendored"
+
+[[dependency]]
+name = "ONNX Runtime"
+version = "planned"
+license = "MIT"
+source_url = "https://github.com/microsoft/onnxruntime"
+purpose = "Optional model-runtime adapter"
+risk_level = "low"
+status = "not-vendored"
+
+[[dependency]]
+name = "PaddleOCR"
+version = "planned"
+license = "Apache-2.0"
+source_url = "https://github.com/PaddlePaddle/PaddleOCR"
+purpose = "Optional OCR integration reference"
+risk_level = "medium"
+status = "code-and-weights-require-separate-audit"
+
+[[dependency]]
+name = "CameraX"
+version = "planned"
+license = "Apache-2.0"
+source_url = "https://developer.android.com/jetpack/androidx/releases/camera"
+purpose = "Android capture integration in wellfriend-scan"
+risk_level = "low"
+status = "not-vendored"
+
+[[dependency]]
+name = "DocRes"
+version = "planned"
+license = "MIT"
+source_url = "https://github.com/ZZZHANG-jx/DocRes"
+purpose = "Restoration reference"
+risk_level = "high"
+status = "code-mit-weights-and-datasets-separate-audit"
+
+[[dependency]]
+name = "PINTO doc-dewarping"
+version = "planned"
+license = "MIT"
+source_url = "https://github.com/PINTO0309/PINTO_model_zoo"
+purpose = "Curved-page dewarping reference"
+risk_level = "medium"
+status = "exact-component-license-must-be-verified"
+
+[[dependency]]
+name = "DocAligner"
+version = "planned"
+license = "Apache-2.0"
+source_url = "https://github.com/fh2019ustc/DocAligner"
+purpose = "Corner-prediction reference"
+risk_level = "medium"
+status = "exact-release-license-must-be-verified"
+
+[[dependency]]
+name = "MakeACopy"
+version = "planned"
+license = "Apache-2.0"
+source_url = "https://github.com/antonioleiva/make-a-copy"
+purpose = "Android scanner foundation reference"
+risk_level = "medium"
+status = "exact-upstream-license-must-be-verified"
+
+[[dependency]]
+name = "actions/checkout"
+version = "v4"
+license = "MIT"
+source_url = "https://github.com/actions/checkout"
+purpose = "GitHub Actions checkout"
+risk_level = "low"
+status = "ci-only"
+
+[[dependency]]
+name = "dtolnay/rust-toolchain"
+version = "stable"
+license = "MIT OR Apache-2.0"
+source_url = "https://github.com/dtolnay/rust-toolchain"
+purpose = "GitHub Actions Rust toolchain setup"
+risk_level = "low"
+status = "ci-only"

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ScanBenchRecord",
+  "type": "object",
+  "required": ["schema_version", "sample_id", "sample_hash", "domain", "device_class", "metrics"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "sample_id": {"type": "string"},
+    "sample_hash": {"type": "string"},
+    "domain": {"type": "string"},
+    "device_class": {"type": "string"},
+    "metrics": {"type": "object"}
+  }
+}
+
