@@ -12,3 +12,7 @@ wellfriend-perception-image = { path = "../image" }
 
 [lints]
 workspace = true
+
+[[bench]]
+name = "detection_baseline"
+harness = false
