@@ -1,0 +1,16 @@
+[package]
+name = "wellfriend-perception-wasm"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "WebAssembly runtime seam for Wellfriend Perception scalar APIs."
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+wellfriend-perception-ffi = { path = "../ffi" }
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+wasm-bindgen = "0.2.100"

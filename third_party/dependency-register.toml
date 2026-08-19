@@ -101,3 +101,36 @@ purpose = "GitHub Actions Rust toolchain setup"
 risk_level = "low"
 status = "ci-only"
 used_by = ["GitHub Actions CI and benchmark workflows"]
+
+[[dependency]]
+name = "serde"
+version = "1.0.219"
+license = "MIT OR Apache-2.0"
+source_url = "https://github.com/serde-rs/serde"
+purpose = "Stable JSON runtime serialization schema for C ABI and WASM bindings"
+risk_level = "low"
+status = "direct-runtime"
+used_by = ["wellfriend-perception-ffi"]
+scope = "base"
+
+[[dependency]]
+name = "serde_json"
+version = "1.0.140"
+license = "MIT OR Apache-2.0"
+source_url = "https://github.com/serde-rs/json"
+purpose = "Strict JSON request validation and structured runtime responses"
+risk_level = "low"
+status = "direct-runtime"
+used_by = ["wellfriend-perception-ffi"]
+scope = "base"
+
+[[dependency]]
+name = "wasm-bindgen"
+version = "0.2.100"
+license = "MIT OR Apache-2.0"
+source_url = "https://github.com/rustwasm/wasm-bindgen"
+purpose = "WebAssembly JavaScript boundary for scalar Wellfriend runtime"
+risk_level = "low"
+status = "direct-runtime-target-specific"
+used_by = ["wellfriend-perception-wasm"]
+scope = "optional"

@@ -2,7 +2,7 @@
   "schema_version": 1,
   "ecosystem_version": "0.1.0-alpha.1",
   "repositories": {
-    "wellfriend-perception": { "sha": "cf9589a15ff599156cd0bb04d757d0de12d261b1", "branch": "feat/mp9-ecosystem-hardening-release", "contracts": ["DomainPack", "ScanBench", "processing-plan"] },
+    "wellfriend-perception": { "sha": "ffdae02ce09d33e4e4bc480d93a7e1e2a650e2c4", "branch": "main", "contracts": ["DomainPack", "ScanBench", "processing-plan", "runtime-json-v1", "shape-general-boundary"] },
     "wellfriend-models": { "sha": "6d35d9328b18761fe3e5d9f7bc4760fe5b32499f", "branch": "feat/mp9-ecosystem-hardening-release", "contracts": ["model-artifact", "registry", "device-profile"] },
     "wellfriend-scan": { "sha": "bb6f9b72babddf6d4428300be2ca73614a105138", "branch": "feat/mp9-ecosystem-hardening-release", "contracts": ["scan-session", "perception-engine", "export"] }
   },
@@ -15,7 +15,7 @@
     "export_formats": ["JPEG", "PNG", "PDF_PLACEHOLDER", "JSON_DEBUG"],
     "model_artifact_schema": "1", "benchmark_schema": "scanbench-record.schema.json"
   },
-  "known_blockers": ["Android JNI/C ABI is not published", "WASM perception artifact is not published", "production OCR and PDF export are not implemented"],
+  "known_blockers": ["Android C ABI is not cross-compiled or packaged as ABI-specific libraries", "WASM package is not published for browser loading", "production OCR and PDF export are not implemented"],
   "mock_boundaries": ["scanner dev mocks are test/dev-only", "synthetic benchmarks are not real-world claims"],
-  "audit_gates": ["DocRes code/weights/datasets", "model/dataset provenance", "future ONNX runtime integration"]
+  "audit_gates": ["DocRes code/weights/datasets", "model/dataset provenance", "Android ABI packaging", "browser WASM distribution", "future ONNX runtime integration"]
 }

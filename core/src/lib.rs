@@ -4,6 +4,7 @@
 //! supplied through [`DomainPack`] implementations.
 
 pub mod benchmarks;
+pub mod boundary;
 mod diagnostics;
 mod error;
 pub mod geometry;
@@ -13,6 +14,7 @@ pub mod prelude;
 mod traits;
 mod types;
 
+pub use boundary::*;
 pub use diagnostics::*;
 pub use error::*;
 pub use pipeline::*;
