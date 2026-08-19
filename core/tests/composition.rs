@@ -37,6 +37,7 @@ impl FusionEngine for Fuse {
         Ok(FusionResult {
             candidates: sources.first().cloned().unwrap_or_default(),
             diagnostics: vec!["aggregated".into()],
+            ..Default::default()
         })
     }
 }
@@ -50,6 +51,7 @@ impl Refiner for Refine {
         Ok(RefinementResult {
             candidates: fused.candidates.clone(),
             diagnostics: vec![],
+            ..Default::default()
         })
     }
 }
@@ -65,6 +67,7 @@ impl TemporalEstimator for Temporal {
             stable: true,
             confidence: Confidence::new(1.0).unwrap(),
             diagnostics: vec![],
+            ..Default::default()
         })
     }
 }

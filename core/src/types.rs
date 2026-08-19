@@ -1,7 +1,7 @@
 use core::fmt;
 use std::collections::BTreeMap;
 
-use crate::{PerceptionError, PerceptionResult, PipelineTrace};
+use crate::{PerceptionError, PerceptionResult, PipelineTrace, StageTiming};
 
 /// Stable identifier for an observation supplied to the pipeline.
 #[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
@@ -723,11 +723,43 @@ pub enum QualityMetric {
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct QualityVector(pub BTreeMap<String, f32>);
 
-/// Measured quality plus detector diagnostics.
+/// Raw and normalized evidence for one named quality measurement.
+#[derive(Clone, Debug, PartialEq)]
+pub struct QualityMeasurement {
+    /// Unnormalized implementation-specific measurement.
+    pub raw_value: f32,
+    /// Higher-is-better normalized score unless documented in the metric name.
+    pub normalized_score: Score,
+    /// Reliability of this scalar estimate.
+    pub confidence: Confidence,
+    /// Implementation notes, including placeholder limitations.
+    pub diagnostics: Vec<String>,
+}
+
+impl Default for QualityMeasurement {
+    fn default() -> Self {
+        Self {
+            raw_value: 0.0,
+            normalized_score: Score::default(),
+            confidence: Confidence::default(),
+            diagnostics: Vec::new(),
+        }
+    }
+}
+
+/// Measured quality, actionable guidance, and diagnostics.
 #[derive(Clone, Debug, Default, PartialEq)]
 pub struct QualityReport {
-    /** Values by metric name. */
+    /** Compatibility vector of normalized values by metric name. */
     pub vector: QualityVector,
+    /** Structured measurements by stable metric identifier. */
+    pub metrics: BTreeMap<String, QualityMeasurement>,
+    /** Aggregate report confidence. */
+    pub confidence: Confidence,
+    /** Machine-readable warning identifiers. */
+    pub warnings: Vec<String>,
+    /** Machine-readable recommended action identifiers. */
+    pub recommended_actions: Vec<String>,
     /** Implementation diagnostics. */
     pub diagnostics: Vec<String>,
 }
@@ -874,6 +906,60 @@ pub struct Uncertainty {
     pub notes: Vec<String>,
 }
 
+/// Typed payload carried by a detection candidate without forcing a domain shape.
+#[derive(Clone, Debug, PartialEq)]
+pub enum DetectionGeometry {
+    /// A two-dimensional point.
+    Point(Point2),
+    /// An infinite two-dimensional line.
+    Line(Line2),
+    /// A finite polygon.
+    Polygon(Polygon),
+    /// A validated four-corner polygon.
+    Quad(Quad),
+    /// A raster mask.
+    Mask(Mask),
+    /// Axis-aligned bounds.
+    BoundingBox(BoundingBox),
+    /// A domain-declared surface.
+    Surface(Surface),
+    /// A declared pose.
+    Pose(Pose),
+}
+
+/// Detector configuration that remains portable across runtime implementations.
+#[derive(Clone, Debug, Default, PartialEq)]
+pub struct DetectorConfig {
+    /// Stable detector identifier or model artifact name.
+    pub id: String,
+    /// Maximum candidates requested from the detector.
+    pub max_candidates: usize,
+    /// Detector-owned scalar settings encoded as strings for cross-language bindings.
+    pub attributes: BTreeMap<String, String>,
+}
+
+/// Declared capabilities and runtime boundaries for an independently attributable detector.
+#[derive(Clone, Debug, Default, PartialEq)]
+pub struct DetectorCapabilities {
+    /// Geometry payload kinds supported by this detector.
+    pub geometry_kinds: Vec<String>,
+    /// Whether model inference is required.
+    pub model_backed: bool,
+    /// Whether the detector accepts manual geometry.
+    pub accepts_manual_geometry: bool,
+    /// Human-readable device/runtime constraints.
+    pub supported_runtime_classes: Vec<String>,
+}
+
+/// Per-detector diagnostics and measured stage timings.
+#[derive(Clone, Debug, Default, PartialEq)]
+pub struct DetectionDiagnostics {
+    /// Pipeline stage timings attributable to this output.
+    pub timings: Vec<StageTiming>,
+    /// Machine-readable and development diagnostics.
+    pub messages: Vec<String>,
+}
+
 impl Uncertainty {
     /// Creates a scalar variance after rejecting negative and non-finite values.
     pub fn with_variance(variance: f32) -> PerceptionResult<Self> {
@@ -899,10 +985,16 @@ pub struct DetectionCandidate {
     pub source: DetectionSource,
     /** Calibrated confidence. */
     pub confidence: DetectionConfidence,
-    /** Optional polygon geometry. */
+    /** Legacy polygon convenience geometry. */
     pub geometry: Option<Polygon>,
+    /** Typed geometry payload for generic consumers. */
+    pub geometry_payload: Option<DetectionGeometry>,
+    /** Heuristic or calibrated raw score, explicitly distinct from confidence. */
+    pub score: Score,
     /** Uncertainty payload. */
     pub uncertainty: Uncertainty,
+    /** Per-candidate timing and diagnostics. */
+    pub diagnostics: DetectionDiagnostics,
     /** Extension values. */
     pub attributes: BTreeMap<String, String>,
 }
@@ -911,6 +1003,8 @@ pub struct DetectionCandidate {
 pub struct DetectionSet {
     /** Candidates. */
     pub candidates: Vec<DetectionCandidate>,
+    /** Source identifier for set-level provenance when candidates share one detector. */
+    pub detector_id: Option<String>,
     /** Diagnostics. */
     pub diagnostics: Vec<String>,
 }
@@ -919,6 +1013,16 @@ pub struct DetectionSet {
 pub struct FusionResult {
     /** Fused candidates. */
     pub candidates: DetectionSet,
+    /** Best fused typed geometry when consensus exists. */
+    pub fused_geometry: Option<DetectionGeometry>,
+    /** Confidence of the selected fused geometry. */
+    pub confidence: Confidence,
+    /** Sources participating in the selected consensus. */
+    pub contributing_sources: Vec<DetectionSource>,
+    /** Sources rejected because of disagreement or invalid geometry. */
+    pub rejected_sources: Vec<DetectionSource>,
+    /** Zero means agreement; one means maximal disagreement. */
+    pub disagreement_score: Score,
     /** Diagnostics. */
     pub diagnostics: Vec<String>,
 }
@@ -927,6 +1031,12 @@ pub struct FusionResult {
 pub struct RefinementResult {
     /** Refined candidates. */
     pub candidates: DetectionSet,
+    /** Refined typed geometry for direct consumers. */
+    pub refined_geometry: Option<DetectionGeometry>,
+    /** Pixel-space movement magnitude from input geometry to refined geometry. */
+    pub refinement_delta: f32,
+    /** Reliability of the refinement evidence. */
+    pub confidence: Confidence,
     /** Diagnostics. */
     pub diagnostics: Vec<String>,
 }
@@ -937,6 +1047,16 @@ pub struct TemporalState {
     pub stable: bool,
     /** Bounded confidence. */
     pub confidence: Confidence,
+    /** Stable identity assigned by the tracker when available. */
+    pub track_id: Option<u64>,
+    /** Latest processed frame index. */
+    pub frame_index: Option<FrameIndex>,
+    /** Translation velocity in pixels per frame in the declared coordinate system. */
+    pub velocity: Option<Point2>,
+    /** Zero-to-one temporal stability score. */
+    pub stability_score: Score,
+    /** Number of consecutive frames without an accepted candidate. */
+    pub lost_frames: u32,
     /** Diagnostics. */
     pub diagnostics: Vec<String>,
 }

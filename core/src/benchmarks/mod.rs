@@ -26,22 +26,39 @@ pub struct BenchmarkRecord {
 }
 
 impl BenchmarkRecord {
-    /// Creates a synthetic-host benchmark record for one named operation.
-    pub fn scalar_baseline(
+    /// Creates a baseline record for a deterministic generated fixture.
+    pub fn synthetic_baseline(
+        domain: impl Into<String>,
+        sample_id: impl Into<String>,
         operation: impl Into<String>,
         iterations: u64,
         elapsed_nanoseconds: u128,
     ) -> Self {
         Self {
             schema_version: 1,
-            sample_id: "mp2-inline-synthetic".into(),
-            sample_hash: "inline-deterministic-fixture".into(),
-            domain: "generic".into(),
+            sample_id: sample_id.into(),
+            sample_hash: "generated-deterministic-fixture".into(),
+            domain: domain.into(),
             device_class: "host-scalar".into(),
             operation: operation.into(),
             iterations,
             elapsed_nanoseconds,
         }
+    }
+
+    /// Creates a synthetic-host benchmark record for one named operation.
+    pub fn scalar_baseline(
+        operation: impl Into<String>,
+        iterations: u64,
+        elapsed_nanoseconds: u128,
+    ) -> Self {
+        Self::synthetic_baseline(
+            "generic",
+            "mp2-inline-synthetic",
+            operation,
+            iterations,
+            elapsed_nanoseconds,
+        )
     }
 
     /// Emits one compact JSON line conforming to the MP1 ScanBench envelope.
