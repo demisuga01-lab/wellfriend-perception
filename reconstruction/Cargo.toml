@@ -1,0 +1,19 @@
+[package]
+name = "wellfriend-perception-reconstruction"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+description = "Canonical reconstruction contracts and scalar document planar reconstruction."
+
+[dependencies]
+wellfriend-perception-core = { path = "../core" }
+wellfriend-perception-image = { path = "../image" }
+wellfriend-perception-intelligence = { path = "../intelligence" }
+
+[lints]
+workspace = true
+
+[[bench]]
+name = "reconstruction_baseline"
+harness = false
