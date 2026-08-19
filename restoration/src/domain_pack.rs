@@ -31,7 +31,10 @@ pub trait RuntimeDomainPack: Send + Sync {
     /// Pipeline stages this pack may contribute.
     fn supported_stages(&self) -> &[PipelineStage];
     /// Processor ids owned or allowed by this pack.
-    fn processors(&self) -> &[ProcessorId];
+    ///
+    /// This returns owned identifiers so a pack can state real runtime behavior
+    /// without leaking mutable or static backing storage through the contract.
+    fn processors(&self) -> Vec<ProcessorId>;
     /// Filter presets exposed by this pack.
     fn document_filters(&self) -> &[DocumentFilterPreset];
     /// Domain-owned benchmark metric names.
@@ -114,8 +117,19 @@ impl RuntimeDomainPack for DocumentDomainPack {
             PipelineStage::Export,
         ]
     }
-    fn processors(&self) -> &[ProcessorId] {
-        &[]
+    fn processors(&self) -> Vec<ProcessorId> {
+        [
+            "brightness_contrast",
+            "gamma",
+            "denoise",
+            "unsharp",
+            "background_normalization",
+            "grayscale",
+            "binarize",
+        ]
+        .into_iter()
+        .map(ProcessorId::new)
+        .collect()
     }
     fn document_filters(&self) -> &[DocumentFilterPreset] {
         &[
@@ -187,8 +201,8 @@ impl RuntimeDomainPack for StubDomainPack {
     fn supported_stages(&self) -> &[PipelineStage] {
         &[PipelineStage::Reconstruction]
     }
-    fn processors(&self) -> &[ProcessorId] {
-        &[]
+    fn processors(&self) -> Vec<ProcessorId> {
+        Vec::new()
     }
     fn document_filters(&self) -> &[DocumentFilterPreset] {
         &[]

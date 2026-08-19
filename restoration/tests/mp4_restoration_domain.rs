@@ -198,7 +198,14 @@ fn domain_packs_register_without_changing_core_semantics() {
     registry
         .register(Box::new(industrial_domain_pack()))
         .unwrap();
-    assert_eq!(registry.get("document").unwrap().id(), "document");
+    let document = registry.get("document").unwrap();
+    assert_eq!(document.id(), "document");
+    assert!(
+        document
+            .processors()
+            .iter()
+            .any(|processor| processor.as_str() == "background_normalization")
+    );
     assert_eq!(
         registry.get("medical_research").unwrap().id(),
         "medical_research"
