@@ -10,11 +10,13 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
         with:
           components: rustfmt, clippy
+          targets: wasm32-unknown-unknown
       - run: cargo fmt --all -- --check
       - run: cargo clippy --workspace --all-targets --all-features -- -D warnings
       - run: cargo test --workspace --all-features
       - run: cargo doc --workspace --all-features --no-deps
       - run: cargo bench --workspace --no-run
+      - run: cargo build -p wellfriend-perception-wasm --target wasm32-unknown-unknown
       - shell: pwsh
         run: ./tools/check-dependency-register.ps1
       - shell: pwsh
