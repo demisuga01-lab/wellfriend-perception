@@ -8,7 +8,7 @@
 use wasm_bindgen::prelude::*;
 
 #[cfg(target_arch = "wasm32")]
-use wellfriend_perception_ffi::runtime::{RuntimeEngine, runtime_error_json};
+use wellfriend_perception::runtime::{RuntimeEngine, runtime_error_json};
 
 /// Opaque WASM runtime handle. It owns no image data between calls.
 #[cfg_attr(target_arch = "wasm32", wasm_bindgen)]

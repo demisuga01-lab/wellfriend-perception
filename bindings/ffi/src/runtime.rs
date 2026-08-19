@@ -31,6 +31,32 @@ pub const MAX_RUNTIME_IMAGE_BYTES: usize = 64 * 1024 * 1024;
 pub const COORDINATE_CONVENTION: &str =
     "origin_top_left;x_right;y_down;unit_source_pixels;quad_tl_tr_br_bl";
 
+/// Monotonic host timing is unavailable in bare `wasm32-unknown-unknown`.
+/// The browser package returns zero-valued timing fields rather than panicking
+/// or inventing performance data; browser instrumentation belongs at the host.
+#[cfg(not(target_arch = "wasm32"))]
+struct RuntimeStageTimer(std::time::Instant);
+#[cfg(not(target_arch = "wasm32"))]
+impl RuntimeStageTimer {
+    fn start() -> Self {
+        Self(std::time::Instant::now())
+    }
+    fn elapsed_micros(&self) -> u64 {
+        self.0.elapsed().as_micros() as u64
+    }
+}
+#[cfg(target_arch = "wasm32")]
+struct RuntimeStageTimer;
+#[cfg(target_arch = "wasm32")]
+impl RuntimeStageTimer {
+    fn start() -> Self {
+        Self
+    }
+    fn elapsed_micros(&self) -> u64 {
+        0
+    }
+}
+
 /// A point in source-image pixels.
 #[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq)]
 pub struct RuntimePoint2 {
@@ -248,12 +274,12 @@ impl RuntimeEngine {
     ) -> Result<String, String> {
         let request: AnalyzeFrameRequest = parse_request(request_json, "AnalyzeFrameRequest")?;
         let image = decode_image(bytes, width, height, stride, pixel_format)?;
-        let start = std::time::Instant::now();
+        let start = RuntimeStageTimer::start();
         let quality = ScalarQualityAnalyzer::default()
             .analyze(&image)
             .map_err(display_error)?;
-        let quality_elapsed = start.elapsed().as_micros() as u64;
-        let detection_start = std::time::Instant::now();
+        let quality_elapsed = start.elapsed_micros();
+        let detection_start = RuntimeStageTimer::start();
         let mut set = ClassicalDocumentDetector::default()
             .detect_image(&image)
             .map_err(display_error)?
@@ -262,8 +288,8 @@ impl RuntimeEngine {
             set.candidates
                 .push(manual_quad_candidate(manual.try_into()?).map_err(display_error)?);
         }
-        let detection_elapsed = detection_start.elapsed().as_micros() as u64;
-        let fusion_start = std::time::Instant::now();
+        let detection_elapsed = detection_start.elapsed_micros();
+        let fusion_start = RuntimeStageTimer::start();
         let fusion = QuadFusionEngine::default()
             .fuse(&[set.clone()])
             .map_err(display_error)?;
@@ -288,7 +314,7 @@ impl RuntimeEngine {
             temporal: &temporal_update.state,
             image_shape: image.shape(),
         });
-        let fusion_elapsed = fusion_start.elapsed().as_micros() as u64;
+        let fusion_elapsed = fusion_start.elapsed_micros();
         let candidate_quads = set
             .candidates
             .iter()

@@ -126,7 +126,7 @@ scope = "base"
 
 [[dependency]]
 name = "wasm-bindgen"
-version = "0.2.100"
+version = "0.2.123"
 license = "MIT OR Apache-2.0"
 source_url = "https://github.com/rustwasm/wasm-bindgen"
 purpose = "WebAssembly JavaScript boundary for scalar Wellfriend runtime"
@@ -134,3 +134,14 @@ risk_level = "low"
 status = "direct-runtime-target-specific"
 used_by = ["wellfriend-perception-wasm"]
 scope = "optional"
+
+[[dependency]]
+name = "actions/upload-artifact"
+version = "v4"
+license = "MIT"
+source_url = "https://github.com/actions/upload-artifact"
+purpose = "Manual CI publication of reproducible Android ABI and browser WASM build artifacts"
+risk_level = "low"
+status = "ci-only"
+used_by = ["manual Android ABI and WASM package workflows"]
+scope = "dev"

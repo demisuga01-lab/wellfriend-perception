@@ -1,6 +1,6 @@
 use std::ffi::{CStr, CString};
 
-use wellfriend_perception_ffi::{
+use wellfriend_perception::{
     runtime::{AnalyzeFrameResponse, ApplyFilterResponse, ReconstructPageResponse, RuntimeEngine},
     wf_analyze_frame, wf_apply_filter, wf_engine_create, wf_engine_destroy, wf_reconstruct_page,
     wf_string_free,
