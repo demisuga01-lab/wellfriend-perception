@@ -1,0 +1,5 @@
+name: Model artifact review
+description: Artifact compatibility/provenance review
+body:
+  - type: textarea
+    attributes: { label: Manifest, hashes, license, and runtime evidence }

@@ -1,12 +1,12 @@
 [workspace]
 resolver = "3"
-members = ["core", "image", "intelligence"]
+members = ["core", "image", "intelligence", "reconstruction", "restoration"]
 
 [workspace.package]
 version = "0.1.0"
 edition = "2024"
 license = "Apache-2.0"
-repository = "https://github.com/wellfriend/wellfriend-perception"
+repository = "https://github.com/demisuga01-lab/wellfriend-perception"
 rust-version = "1.85"
 
 [workspace.lints.rust]

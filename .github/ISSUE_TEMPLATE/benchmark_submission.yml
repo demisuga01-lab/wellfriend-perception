@@ -1,0 +1,5 @@
+name: Benchmark submission
+description: Reproducible ScanBench evidence
+body:
+  - type: textarea
+    attributes: { label: Fixture provenance, hardware, commands, and limitations }

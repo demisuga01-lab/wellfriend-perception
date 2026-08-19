@@ -1,0 +1,5 @@
+name: Dataset license review
+description: Dataset provenance review
+body:
+  - type: textarea
+    attributes: { label: Source, license, redistribution, and intended use }

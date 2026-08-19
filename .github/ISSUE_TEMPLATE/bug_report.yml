@@ -1,0 +1,7 @@
+name: Bug report
+description: Reproducible engine defect
+body:
+  - type: textarea
+    attributes: { label: Reproduction and expected behavior }
+  - type: textarea
+    attributes: { label: Version, platform, and safety impact }

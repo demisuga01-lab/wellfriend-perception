@@ -20,3 +20,22 @@ dependencies = [
  "wellfriend-perception-core",
  "wellfriend-perception-image",
 ]
+
+[[package]]
+name = "wellfriend-perception-reconstruction"
+version = "0.1.0"
+dependencies = [
+ "wellfriend-perception-core",
+ "wellfriend-perception-image",
+ "wellfriend-perception-intelligence",
+]
+
+[[package]]
+name = "wellfriend-perception-restoration"
+version = "0.1.0"
+dependencies = [
+ "wellfriend-perception-core",
+ "wellfriend-perception-image",
+ "wellfriend-perception-intelligence",
+ "wellfriend-perception-reconstruction",
+]

@@ -1,5 +1,6 @@
 schema_version = 1
-# MP3 review: the intelligence crate adds no third-party dependencies.
+# MP4 review: reconstruction/restoration add no third-party Rust dependencies.
+# Planned references remain non-vendored and audit-gated where provenance is incomplete.
 
 [[dependency]]
 name = "OpenCV"
@@ -55,30 +56,30 @@ used_by = ["future document restoration adapter"]
 name = "PINTO doc-dewarping"
 version = "planned"
 license = "MIT"
-source_url = "https://github.com/PINTO0309/PINTO_model_zoo"
-purpose = "Curved-page dewarping reference"
-risk_level = "medium"
-status = "exact-component-license-must-be-verified"
-used_by = ["future curved-surface reconstruction adapter"]
+source_url = "https://github.com/PINTO0309/doc-dewarping"
+purpose = "Curved-page dewarping algorithmic reference; no code is vendored or ported"
+risk_level = "high"
+status = "audit-gated-for-vendoring-or-port; upstream MIT verified; Python/OpenCV runtime and any derived implementation require separate audit"
+used_by = ["future curved-surface reconstruction adapter; MP4 architecture note only"]
 
 [[dependency]]
 name = "DocAligner"
 version = "planned"
-license = "Apache-2.0"
+license = "unverified"
 source_url = "https://github.com/fh2019ustc/DocAligner"
-purpose = "Corner-prediction reference"
-risk_level = "medium"
-status = "exact-release-license-must-be-verified"
-used_by = ["future document corner detector reference"]
+purpose = "Historical corner-prediction reference; current source URL was unavailable during MP4 audit"
+risk_level = "high"
+status = "audit-gated-source-unavailable; prohibited from production use until an exact upstream and permissive license are verified"
+used_by = ["future document corner detector reference only"]
 
 [[dependency]]
 name = "MakeACopy"
 version = "planned"
 license = "Apache-2.0"
-source_url = "https://github.com/antonioleiva/make-a-copy"
+source_url = "https://github.com/egdels/makeacopy"
 purpose = "Android scanner foundation reference"
 risk_level = "medium"
-status = "exact-upstream-license-must-be-verified"
+status = "audit-gated-for-code-or-assets; Apache-2.0 contribution policy verified; transitive assets and components require separate audit"
 used_by = ["wellfriend-scan Android reference only"]
 
 [[dependency]]
