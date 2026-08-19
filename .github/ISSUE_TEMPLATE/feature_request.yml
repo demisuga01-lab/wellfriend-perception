@@ -1,0 +1,5 @@
+name: Feature request
+description: Propose a bounded capability
+body:
+  - type: textarea
+    attributes: { label: Problem, domain, and contract impact }
