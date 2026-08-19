@@ -1,0 +1,18 @@
+[package]
+name = "wellfriend-perception-ffi"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Audited C ABI and JSON runtime contract for Wellfriend Perception."
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+serde = { version = "1.0.219", features = ["derive"] }
+serde_json = "1.0.140"
+wellfriend-perception-core = { path = "../../core" }
+wellfriend-perception-intelligence = { path = "../../intelligence" }
+wellfriend-perception-reconstruction = { path = "../../reconstruction" }
+wellfriend-perception-restoration = { path = "../../restoration" }
