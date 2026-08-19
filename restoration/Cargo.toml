@@ -1,0 +1,20 @@
+[package]
+name = "wellfriend-perception-restoration"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+description = "Condition routing and scalar restoration contracts for Wellfriend."
+
+[dependencies]
+wellfriend-perception-core = { path = "../core" }
+wellfriend-perception-image = { path = "../image" }
+wellfriend-perception-intelligence = { path = "../intelligence" }
+wellfriend-perception-reconstruction = { path = "../reconstruction" }
+
+[lints]
+workspace = true
+
+[[bench]]
+name = "restoration_baseline"
+harness = false
