@@ -1,6 +1,6 @@
 # Wellfriend Perception 0.1.0-alpha.2 (unreleased)
 
-The scalar engine now has host-tested C ABI and WASM-target build seams. Android `.so` packaging and a published browser bundle are still not supplied. Boundary results remain evidence-based: scalar document quads are experimental, arbitrary-shape detection is a future contract, and no perfect-edge claim is made.
+The scalar engine now has host-tested C ABI plus reproducible Android ABI and browser WASM package commands. Packages are verified with source-SHA manifests and checksums, and are consumed locally/through CI artifacts rather than committed opaque binaries. Boundary results remain evidence-based: scalar document quads are experimental, arbitrary-shape detection is a future contract, and no perfect-edge claim is made.
 
 ## 0.1.0-alpha.1
 
