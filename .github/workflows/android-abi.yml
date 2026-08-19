@@ -1,0 +1,35 @@
+name: Android ABI artifacts
+
+on:
+  workflow_dispatch:
+    inputs:
+      profile:
+        description: Cargo profile to package
+        required: true
+        default: release
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Install Android NDK
+        run: |
+          yes | "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" --licenses
+          "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" "ndk;27.1.12297006"
+      - name: Build ABI artifacts
+        env:
+          ANDROID_NDK_ROOT: ${{ env.ANDROID_SDK_ROOT }}/ndk/27.1.12297006
+        run: ./scripts/build-android-abi.sh ${{ inputs.profile }}
+      - name: Validate manifest and checksums
+        shell: pwsh
+        run: ./scripts/validate-runtime-artifact.ps1 -ArtifactRoot target/wellfriend-android -Kind android
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wellfriend-android-abi-${{ inputs.profile }}
+          path: target/wellfriend-android
+          if-no-files-found: error

@@ -7,10 +7,10 @@
 | Planar reconstruction and scalar filters | experimental synthetic baseline | MP4 tests | not production scan quality |
 | DomainPack runtime | implemented contract | domain proof registrations | extensibility proof |
 | C ABI scalar runtime | implemented/host-tested | FFI parity tests | experimental scalar bridge |
-| WASM scalar runtime | target-built | `wasm32-unknown-unknown` build | no package published |
-| Android scanner | JNI seam / fail-closed release | host contracts; `.so` packaging deferred | no Android native artifact |
-| Web/desktop scanner | WASM seam / fail-closed production | TypeScript runtime mapping tests | no browser WASM package |
+| WASM scalar runtime | packaged CI/manual artifact | wasm-bindgen package manifest/checksums and smoke path | scalar experimental runtime |
+| Android scanner | packaged CI/manual ABI artifact | arm64-v8a/x86_64 manifest/checksums; scanner sync path | native packaging, no device claim |
+| Web/desktop scanner | packaged WASM sync path / fail-closed production | local package loader and worker contracts | browser package required |
 | Models registry | contract-only/experimental | registry validation | no weights released |
-| OCR/PDF/Android ABI package/browser WASM package | blocked | no released distribution | no claim |
+| OCR/PDF/real-device benchmarks | blocked | not implemented or measured | no claim |
 
 Alpha release is permitted only as an unstable technical preview. It is not a production scanner, medical product, OCR system, or benchmark winner.

@@ -7,6 +7,7 @@ repository.workspace = true
 description = "Audited C ABI and JSON runtime contract for Wellfriend Perception."
 
 [lib]
+name = "wellfriend_perception"
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]

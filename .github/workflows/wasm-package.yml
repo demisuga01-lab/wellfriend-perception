@@ -1,0 +1,33 @@
+name: Browser WASM package
+
+on:
+  workflow_dispatch:
+    inputs:
+      profile:
+        description: Cargo profile to package
+        required: true
+        default: release
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - name: Install matching wasm-bindgen CLI
+        run: cargo install wasm-bindgen-cli --version 0.2.123 --locked
+      - name: Build browser package
+        run: ./scripts/build-wasm.sh ${{ inputs.profile }}
+      - name: Validate manifest and checksums
+        shell: pwsh
+        run: ./scripts/validate-runtime-artifact.ps1 -ArtifactRoot target/wellfriend-wasm -Kind wasm
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wellfriend-wasm-package-${{ inputs.profile }}
+          path: target/wellfriend-wasm
+          if-no-files-found: error
