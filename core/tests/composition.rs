@@ -2,13 +2,17 @@ use wellfriend_perception_core::*;
 
 struct Input;
 impl InputProvider for Input {
-    fn next(&mut self, _: &PipelineContext) -> Result<ObservationFrame, String> {
+    fn next(&mut self, _: &PipelineContext) -> PerceptionResult<ObservationFrame> {
         Ok(ObservationFrame::default())
     }
 }
 struct Quality;
 impl QualityAnalyzer for Quality {
-    fn analyze(&self, _: &ObservationFrame, _: &PipelineContext) -> Result<QualityReport, String> {
+    fn analyze(
+        &self,
+        _: &ObservationFrame,
+        _: &PipelineContext,
+    ) -> PerceptionResult<QualityReport> {
         Ok(QualityReport::default())
     }
 }
@@ -19,16 +23,21 @@ impl Detector for Detect {
         _: &ObservationFrame,
         _: &QualityReport,
         _: &PipelineContext,
-    ) -> Result<DetectionSet, String> {
+    ) -> PerceptionResult<DetectionSet> {
         Ok(DetectionSet::default())
     }
 }
 struct Fuse;
 impl FusionEngine for Fuse {
-    fn fuse(&self, sources: &[DetectionSet], _: &PipelineContext) -> Result<FusionResult, String> {
+    fn fuse(
+        &self,
+        sources: &[DetectionSet],
+        _: &PipelineContext,
+    ) -> PerceptionResult<FusionResult> {
         Ok(FusionResult {
             candidates: sources.first().cloned().unwrap_or_default(),
             diagnostics: vec!["aggregated".into()],
+            ..Default::default()
         })
     }
 }
@@ -38,10 +47,11 @@ impl Refiner for Refine {
         &self,
         fused: &FusionResult,
         _: &PipelineContext,
-    ) -> Result<RefinementResult, String> {
+    ) -> PerceptionResult<RefinementResult> {
         Ok(RefinementResult {
             candidates: fused.candidates.clone(),
             diagnostics: vec![],
+            ..Default::default()
         })
     }
 }
@@ -52,11 +62,12 @@ impl TemporalEstimator for Temporal {
         _: &ObservationFrame,
         _: &RefinementResult,
         _: &PipelineContext,
-    ) -> Result<TemporalState, String> {
+    ) -> PerceptionResult<TemporalState> {
         Ok(TemporalState {
             stable: true,
-            confidence: 1.0,
+            confidence: Confidence::new(1.0).unwrap(),
             diagnostics: vec![],
+            ..Default::default()
         })
     }
 }

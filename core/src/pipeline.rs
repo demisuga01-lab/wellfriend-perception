@@ -15,7 +15,7 @@ impl Pipeline<'_> {
     pub fn observe(
         &mut self,
         context: &PipelineContext,
-    ) -> Result<(QualityReport, RefinementResult, TemporalState), String> {
+    ) -> PerceptionResult<(QualityReport, RefinementResult, TemporalState)> {
         let frame = self.input.next(context)?;
         let quality = self.quality.analyze(&frame, context)?;
         let detections = self.detector.detect(&frame, &quality, context)?;

@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "sample_id": "mp2-inline-synthetic",
+  "sample_hash": "inline-deterministic-fixture",
+  "domain": "generic",
+  "device_class": "host-scalar",
+  "metrics": {
+    "operation": "resize_bilinear",
+    "iterations": 100,
+    "elapsed_nanoseconds": 8805000
+  }
+}

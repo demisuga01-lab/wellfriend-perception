@@ -9,7 +9,23 @@
     "sample_hash": {"type": "string"},
     "domain": {"type": "string"},
     "device_class": {"type": "string"},
-    "metrics": {"type": "object"}
+    "metrics": {
+      "type": "object",
+      "properties": {
+        "operation": {"type": "string"},
+        "iterations": {"type": "integer", "minimum": 1},
+        "elapsed_nanoseconds": {"type": "integer", "minimum": 0},
+        "candidate_count": {"type": "number", "minimum": 0},
+        "best_candidate_score": {"type": "number", "minimum": 0, "maximum": 1},
+        "fused_confidence": {"type": "number", "minimum": 0, "maximum": 1},
+        "disagreement_score": {"type": "number", "minimum": 0, "maximum": 1},
+        "quad_corner_error": {"type": "number", "minimum": 0},
+        "quad_iou": {"type": "number", "minimum": 0, "maximum": 1},
+        "edge_support": {"type": "number", "minimum": 0, "maximum": 1},
+        "refinement_delta": {"type": "number", "minimum": 0},
+        "temporal_stability": {"type": "number", "minimum": 0, "maximum": 1},
+        "capture_readiness_score": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    }
   }
 }
-
