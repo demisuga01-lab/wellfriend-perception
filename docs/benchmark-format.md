@@ -15,3 +15,9 @@ It emits one JSON line for RGB-to-gray, bilinear resize, crop, 3x3 convolution, 
 Normal CI compiles the harness with `cargo bench --workspace --no-run`. The manually dispatched benchmark workflow executes it on a hosted runner. Results must state the Rust/toolchain version, host class, optimization profile, input dimensions, iteration count, and whether scalar, SIMD, or accelerator paths were enabled.
 
 ScanBench for the later document reference pack records quality scores, page coverage/visibility, detector candidate error, fusion diagnostics, corner and reconstruction error, restoration scores, semantic OCR metrics, latency, memory, and battery impact.
+
+## MP3 intelligence baselines
+
+Run `cargo bench -p wellfriend-perception-intelligence --bench detection_baseline` to generate synthetic quality-report, classical-detector, quad-fusion, refinement, temporal-sequence, and capture-readiness records. Fixtures are generated in source for centered, rotated, perspective, low-contrast, partial, distractor, and no-document cases.
+
+Detection records may include `candidate_count`, `best_candidate_score`, `fused_confidence`, `disagreement_score`, `quad_corner_error`, `quad_iou`, `edge_support`, `refinement_delta`, `temporal_stability`, and `capture_readiness_score`. Values are fixture-scoped baseline evidence, not accuracy or calibration claims for real-world camera feeds.

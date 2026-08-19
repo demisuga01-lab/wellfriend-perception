@@ -1,4 +1,5 @@
 schema_version = 1
+# MP3 review: the intelligence crate adds no third-party dependencies.
 
 [[dependency]]
 name = "OpenCV"
