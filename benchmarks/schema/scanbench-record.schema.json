@@ -24,7 +24,19 @@
         "edge_support": {"type": "number", "minimum": 0, "maximum": 1},
         "refinement_delta": {"type": "number", "minimum": 0},
         "temporal_stability": {"type": "number", "minimum": 0, "maximum": 1},
-        "capture_readiness_score": {"type": "number", "minimum": 0, "maximum": 1}
+        "capture_readiness_score": {"type": "number", "minimum": 0, "maximum": 1},
+        "reconstruction_latency": {"type": "number", "minimum": 0},
+        "output_width": {"type": "integer", "minimum": 1},
+        "output_height": {"type": "integer", "minimum": 1},
+        "aspect_error": {"type": "number", "minimum": 0},
+        "corner_reprojection_error": {"type": "number", "minimum": 0},
+        "coverage_loss": {"type": "number", "minimum": 0, "maximum": 1},
+        "warp_stretch_score": {"type": "number", "minimum": 0, "maximum": 1},
+        "condition_count": {"type": "integer", "minimum": 0},
+        "processor_count": {"type": "integer", "minimum": 0},
+        "router_cost_estimate": {"type": "number", "minimum": 0},
+        "restoration_delta_contrast": {"type": "number"},
+        "binarization_foreground_ratio": {"type": "number", "minimum": 0, "maximum": 1}
       }
     }
   }

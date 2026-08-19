@@ -21,3 +21,9 @@ ScanBench for the later document reference pack records quality scores, page cov
 Run `cargo bench -p wellfriend-perception-intelligence --bench detection_baseline` to generate synthetic quality-report, classical-detector, quad-fusion, refinement, temporal-sequence, and capture-readiness records. Fixtures are generated in source for centered, rotated, perspective, low-contrast, partial, distractor, and no-document cases.
 
 Detection records may include `candidate_count`, `best_candidate_score`, `fused_confidence`, `disagreement_score`, `quad_corner_error`, `quad_iou`, `edge_support`, `refinement_delta`, `temporal_stability`, and `capture_readiness_score`. Values are fixture-scoped baseline evidence, not accuracy or calibration claims for real-world camera feeds.
+
+## MP4 reconstruction and restoration baselines
+
+Run `cargo bench -p wellfriend-perception-reconstruction --bench reconstruction_baseline` for generated flat-page perspective, rotation/margin, and dense-warp checks. Run `cargo bench -p wellfriend-perception-restoration --bench restoration_baseline` for low-contrast Clean, Grayscale, B&W, background-normalization, and condition-to-plan baselines. Normal CI continues to compile all benches only.
+
+MP4 records may add `reconstruction_latency`, `output_width`, `output_height`, `aspect_error`, `corner_reprojection_error`, `coverage_loss`, `warp_stretch_score`, `condition_count`, `processor_count`, `router_cost_estimate`, `restoration_delta_contrast`, and `binarization_foreground_ratio`. These are scalar fixture measurements: they establish a reproducible regression shape, not production-device performance or image-quality claims.

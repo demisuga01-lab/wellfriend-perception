@@ -19,6 +19,6 @@ cargo doc --workspace --all-features --no-deps
 cargo bench --workspace --no-run
 ```
 
-Current status: MP2 provides checked image buffers/views, domain-neutral math and geometry, scalar image operations, homography/warp, deterministic line RANSAC, and baseline benchmarks. Production detector ensembles, platform bindings, model integrations, and optimized kernels are intentionally deferred.
+Current status: MP4 provides the MP2 image/geometry substrate, MP3 quality/detection/fusion/refinement/temporal intelligence, and MP4 canonical planar document reconstruction, surface/dense-warp seams, condition routing, scalar restoration filters, semantic output contracts, and runtime DomainPack registration. Neural restoration, curved-page dewarping, OCR, export, platform bindings, and model integrations remain intentionally deferred.
 
 The repository is Apache-2.0. See [third_party/dependency-register.toml](third_party/dependency-register.toml) and [docs/dependency-policy.md](docs/dependency-policy.md) before adding dependencies.
