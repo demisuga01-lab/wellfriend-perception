@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "ecosystem_version": "0.1.0-alpha.1",
+  "repositories": {
+    "wellfriend-perception": { "sha": "cf9589a15ff599156cd0bb04d757d0de12d261b1", "branch": "feat/mp9-ecosystem-hardening-release", "contracts": ["DomainPack", "ScanBench", "processing-plan"] },
+    "wellfriend-models": { "sha": "6d35d9328b18761fe3e5d9f7bc4760fe5b32499f", "branch": "feat/mp9-ecosystem-hardening-release", "contracts": ["model-artifact", "registry", "device-profile"] },
+    "wellfriend-scan": { "sha": "bb6f9b72babddf6d4428300be2ca73614a105138", "branch": "feat/mp9-ecosystem-hardening-release", "contracts": ["scan-session", "perception-engine", "export"] }
+  },
+  "shared_contracts": {
+    "device_classes": ["low", "mid", "high", "server", "web", "unknown"],
+    "document_tasks": ["document_segmentation", "document_corner_regression", "document_quality", "document_cleanup_mask", "document_restoration"],
+    "filter_presets": ["ORIGINAL", "AUTO", "CLEAN", "COLOR", "GRAYSCALE", "BLACK_AND_WHITE", "RECEIPT", "BOOK", "WHITEBOARD", "PHOTO_DOCUMENT"],
+    "processor_ids": ["brightness_contrast", "gamma", "denoise", "unsharp", "background_normalization", "grayscale", "binarize"],
+    "guidance_codes": ["NO_DOCUMENT", "MOVE_CLOSER", "MOVE_FARTHER", "HOLD_STEADY", "TOO_DARK", "TOO_BRIGHT", "TOO_BLURRY", "GLARE_DETECTED", "DOCUMENT_CUT_OFF", "LOW_CONFIDENCE", "LOW_DETECTOR_AGREEMENT", "READY", "CAPTURING"],
+    "export_formats": ["JPEG", "PNG", "PDF_PLACEHOLDER", "JSON_DEBUG"],
+    "model_artifact_schema": "1", "benchmark_schema": "scanbench-record.schema.json"
+  },
+  "known_blockers": ["Android JNI/C ABI is not published", "WASM perception artifact is not published", "production OCR and PDF export are not implemented"],
+  "mock_boundaries": ["scanner dev mocks are test/dev-only", "synthetic benchmarks are not real-world claims"],
+  "audit_gates": ["DocRes code/weights/datasets", "model/dataset provenance", "future ONNX runtime integration"]
+}
