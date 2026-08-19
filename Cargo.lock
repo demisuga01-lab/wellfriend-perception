@@ -12,3 +12,11 @@ version = "0.1.0"
 dependencies = [
  "wellfriend-perception-core",
 ]
+
+[[package]]
+name = "wellfriend-perception-intelligence"
+version = "0.1.0"
+dependencies = [
+ "wellfriend-perception-core",
+ "wellfriend-perception-image",
+]
